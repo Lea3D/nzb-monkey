@@ -1570,7 +1570,7 @@ def main():
                     print(Col.FAIL + ' - Reading categories failed!' + Col.OFF)
                     raise EnvironmentError
 
-                cfgregex = re.compile('Category\d\.Name', re.IGNORECASE)
+                cfgregex = re.compile(r'Category\d\.Name', re.IGNORECASE)
 
                 for cfg in res['result']:
                     if cfgregex.match(cfg['Name']):
