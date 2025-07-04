@@ -12,7 +12,7 @@ See detailed information [here](https://nzblnk.github.io/nzb-monkey/).
 
 ~~Use a **32-bit python v3.4** and install all requirements:~~
 
-`pip install -r requirements-build.txt `
+`pip install -r requirements-build.txt`
 
 To build the EXE just call:
 
@@ -24,4 +24,4 @@ Feel free to send pull requests.
 
 ### macOS Support
 
-We still need someone who gives this monkey wings on macOS. 
+We still need someone who gives this monkey wings on macOS.
