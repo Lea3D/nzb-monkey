@@ -32,6 +32,7 @@ def test_nzbindex_regex_without_extension():
     assert download_url == 'https://nzbindex.com/download/11111111-2222-3333-4444-555555555555.nzb'
 
 
+
 def test_nzbindex_http_links():
     sample_xml = """
     <item>
@@ -41,3 +42,4 @@ def test_nzbindex_http_links():
     match = REGEX.search(sample_xml)
     assert match, "No match for NZBIndex regex with http"
     assert match.group('id') == '22222222-3333-4444-5555-666666666666'
+
