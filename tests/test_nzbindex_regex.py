@@ -6,7 +6,7 @@ SAMPLE_XML = """
 </item>
 """
 
-REGEX = re.compile(r'<link>https://nzbindex\.com/download/(?P<id>[0-9a-fA-F-]{36})(?:\.nzb)?</link>')
+REGEX = re.compile(r'<link>https?://nzbindex\.com/download/(?P<id>[0-9a-fA-F-]{36})(?:\.nzb)?</link>')
 
 
 def test_nzbindex_regex():
@@ -30,3 +30,16 @@ def test_nzbindex_regex_without_extension():
     assert nzb_id == '11111111-2222-3333-4444-555555555555'
     download_url = f"https://nzbindex.com/download/{nzb_id}.nzb"
     assert download_url == 'https://nzbindex.com/download/11111111-2222-3333-4444-555555555555.nzb'
+
+
+
+def test_nzbindex_http_links():
+    sample_xml = """
+    <item>
+    <link>http://nzbindex.com/download/22222222-3333-4444-5555-666666666666.nzb</link>
+    </item>
+    """
+    match = REGEX.search(sample_xml)
+    assert match, "No match for NZBIndex regex with http"
+    assert match.group('id') == '22222222-3333-4444-5555-666666666666'
+

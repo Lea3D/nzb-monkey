@@ -10,8 +10,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src
 # Provide a minimal distutils.spawn module required by nzblnkconfig
 distutils_module = types.ModuleType('distutils')
 spawn_module = types.ModuleType('distutils.spawn')
+
 def _find_executable(_):
     return '/usr/bin/true'
+
 spawn_module.find_executable = _find_executable
 distutils_module.spawn = spawn_module
 sys.modules.setdefault('distutils', distutils_module)
@@ -21,7 +23,7 @@ from nzbmonkey import NZBDownload
 
 
 def test_binsearch_download():
-    sample_html = '<a href="https://binsearch.info/details/ABC123">link</a>'
+    sample_html = '<a href="/details/ABC123">link</a>'
 
     search_response = Mock()
     search_response.text = sample_html
@@ -34,9 +36,11 @@ def test_binsearch_download():
     with patch('nzbmonkey.requests.get', side_effect=[search_response, nzb_response]):
         downloader = NZBDownload(
             'https://binsearch.info/search?q={0}',
-            r'href="https?://(?:www\.)?binsearch\.info/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
+
+            r'href="(?:https?://(?:www\.)?binsearch\.info)?/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
+
             'https://binsearch.info/nzb?{id}=on',
-            'test'
+            'test',
         )
         success, nzb = downloader.download_nzb()
         assert success
@@ -45,7 +49,9 @@ def test_binsearch_download():
 
 
 def test_binsearch_regex_new_style():
-    sample_html = '<a href="https://binsearch.info/?action=nzb&id=XYZ789">link</a>'
+
+    sample_html = '<a href="/?action=nzb&id=XYZ789">link</a>'
+
 
     search_response = Mock()
     search_response.text = sample_html
@@ -58,12 +64,13 @@ def test_binsearch_regex_new_style():
     with patch('nzbmonkey.requests.get', side_effect=[search_response, nzb_response]):
         downloader = NZBDownload(
             'https://binsearch.info/search?q={0}',
-            r'href="https?://(?:www\.)?binsearch\.info/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
+            r'href="(?:https?://(?:www\.)?binsearch\.info)?/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
             'https://binsearch.info/nzb?{id}=on',
-            'test'
+            'test',
         )
         success, nzb = downloader.download_nzb()
         assert success
         assert nzb == 'NZB DATA'
         assert downloader.nzb_url == 'https://binsearch.info/nzb?XYZ789=on'
+
 
