@@ -3,7 +3,7 @@
 
 import datetime
 import sys
-from distutils.core import setup
+from setuptools import setup
 
 from version import __version__, __requires__
 
@@ -49,6 +49,6 @@ setup(
     author='',
     author_email='',
     description='',
-    requires=__requires__,
+    install_requires=__requires__,
     **params
 )
