@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 History
+v0.2.11
+- Updated BinSearch and NZBIndex rules
 v0.2.10
 - Fix for Nzbindex search and download urls and regex
 - Fix for Binsearch search and download urls and regex
@@ -99,5 +101,5 @@ v0.1.0
 
 """
 
-__version__ = '0.2.10'
+__version__ = '0.2.11'
 __requires__ = ['pyperclip', 'requests', 'configobj', 'colorama', 'cryptography']
