@@ -767,7 +767,7 @@ def search_nzb(header, password, search_engines, best_nzb, max_missing_files, ma
             {
                 'name': 'BinSearch',
                 'searchUrl': 'https://binsearch.info/search?q={0}',
-                'regex': r'href="https?://binsearch\.info/details/(?P<id>[^"]+)"',
+                'regex': r'href="(?:https?://(?:www\.)?binsearch\.info)?/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
                 'downloadUrl': 'https://binsearch.info/nzb?{id}=on',
                 'skip_segment_debug': False
             },
@@ -783,7 +783,7 @@ def search_nzb(header, password, search_engines, best_nzb, max_missing_files, ma
             {
                 'name': 'NZBIndex',
                 'searchUrl': 'https://nzbindex.com/rss?q={0}&hidespam=1&sort=agedesc&complete=1',
-                'regex': r'<link>https:\/\/nzbindex\.com\/download\/(?P<id>[0-9a-fA-F-]{36})\.nzb<\/link>',
+                'regex': r'<link>https?://nzbindex\.com/download/(?P<id>[0-9a-fA-F-]{36})(?:\.nzb)?</link>',
                 'downloadUrl': 'https://nzbindex.com/download/{id}.nzb',
                 'skip_segment_debug': False
             }
