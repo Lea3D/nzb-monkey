@@ -49,6 +49,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 WAITING_TIME_LONG = 5
 WAITING_TIME_SHORT = 1
 REQUESTS_TIMEOUT = 20
+DEFAULT_UA = f"NZB-Monkey/{__version__}"
 SAVE_STDOUT = sys.stdout
 SAVE_STDERR = sys.stderr
 
@@ -678,8 +679,11 @@ class NZBDownload(object):
         :return bool, str: """
         try:
             self.header = self.header.replace('_', ' ')
-            res = requests.get(self.search_url.format(quote(self.header, encoding='utf-8')),
-                               timeout=REQUESTS_TIMEOUT, headers={'Cookie': 'agreed=true'}, verify=False)
+            res = requests.get(
+                self.search_url.format(quote(self.header, encoding='utf-8')),
+                timeout=REQUESTS_TIMEOUT,
+                headers={'User-Agent': DEFAULT_UA, 'Cookie': 'agreed=true'},
+                verify=False)
         except requests.exceptions.Timeout:
             print(Col.WARN + ' Timeout' + Col.OFF, flush=True)
             return False, None
@@ -706,12 +710,24 @@ class NZBDownload(object):
                 return False, None
         try:
             urlparam = self.nzb_url.split('\t')
-            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'User-Agent': DEFAULT_UA,
+                'Cookie': 'agreed=true'
+            }
             if len(urlparam) > 1:
-                res = requests.post(urlparam[0], data=urlparam[1], headers=headers, timeout=REQUESTS_TIMEOUT,
-                                    verify=False)
+                res = requests.post(
+                    urlparam[0],
+                    data=urlparam[1],
+                    headers=headers,
+                    timeout=REQUESTS_TIMEOUT,
+                    verify=False)
             else:
-                res = requests.get(self.nzb_url, timeout=REQUESTS_TIMEOUT, verify=False)
+                res = requests.get(
+                    self.nzb_url,
+                    timeout=REQUESTS_TIMEOUT,
+                    headers={'User-Agent': DEFAULT_UA, 'Cookie': 'agreed=true'},
+                    verify=False)
         except requests.exceptions.Timeout:
             print(Col.WARN + ' Timeout' + Col.OFF, flush=True)
             return False, None
