@@ -34,7 +34,7 @@ def test_binsearch_download():
     with patch('nzbmonkey.requests.get', side_effect=[search_response, nzb_response]):
         downloader = NZBDownload(
             'https://binsearch.info/search?q={0}',
-            r'href="https?://binsearch\.info/details/(?P<id>[^\"]+)"',
+            r'href="https?://(?:www\.)?binsearch\.info/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
             'https://binsearch.info/nzb?{id}=on',
             'test'
         )
@@ -42,4 +42,28 @@ def test_binsearch_download():
         assert success
         assert nzb == 'NZB DATA'
         assert downloader.nzb_url == 'https://binsearch.info/nzb?ABC123=on'
+
+
+def test_binsearch_regex_new_style():
+    sample_html = '<a href="https://binsearch.info/?action=nzb&id=XYZ789">link</a>'
+
+    search_response = Mock()
+    search_response.text = sample_html
+    search_response.status_code = 200
+
+    nzb_response = Mock()
+    nzb_response.text = 'NZB DATA'
+    nzb_response.status_code = 200
+
+    with patch('nzbmonkey.requests.get', side_effect=[search_response, nzb_response]):
+        downloader = NZBDownload(
+            'https://binsearch.info/search?q={0}',
+            r'href="https?://(?:www\.)?binsearch\.info/(?:details/|\?action=nzb&id=)(?P<id>[^"&/]+)',
+            'https://binsearch.info/nzb?{id}=on',
+            'test'
+        )
+        success, nzb = downloader.download_nzb()
+        assert success
+        assert nzb == 'NZB DATA'
+        assert downloader.nzb_url == 'https://binsearch.info/nzb?XYZ789=on'
 
