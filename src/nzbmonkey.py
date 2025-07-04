@@ -750,8 +750,8 @@ def search_nzb(header, password, search_engines, best_nzb, max_missing_files, ma
         'binsearch':
             {
                 'name': 'BinSearch',
-                'searchUrl': 'https://binsearch.info/?q={0}',
-                'regex': r'href="/details/(?P<id>[^"]+)"',
+                'searchUrl': 'https://binsearch.info/search?q={0}',
+                'regex': r'href="https?://binsearch\.info/details/(?P<id>[^"]+)"',
                 'downloadUrl': 'https://binsearch.info/nzb?{id}=on',
                 'skip_segment_debug': False
             },
